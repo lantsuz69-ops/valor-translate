@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Loader2, Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import SlideToSubmit from "@/components/SlideToSubmit";
 import { toast } from "sonner";
 import type { TranslationResult } from "@/pages/Index";
 
@@ -20,9 +19,7 @@ const MilitaryForm = ({ onResult, isLoading, setIsLoading }: MilitaryFormProps) 
   const [role, setRole] = useState("");
   const [responsibilities, setResponsibilities] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     if (!role.trim() || !responsibilities.trim() || !fullName.trim()) {
       toast.error("נא למלא את כל השדות");
       return;
@@ -61,7 +58,7 @@ const MilitaryForm = ({ onResult, isLoading, setIsLoading }: MilitaryFormProps) 
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="fullName" className="text-foreground">שם מלא</Label>
               <Input
@@ -98,24 +95,7 @@ const MilitaryForm = ({ onResult, isLoading, setIsLoading }: MilitaryFormProps) 
               />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full gap-2"
-              size="lg"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  מתרגם...
-                </>
-              ) : (
-                <>
-                  <Send className="h-5 w-5" />
-                  תרגם לשפה מקצועית
-                </>
-              )}
-            </Button>
+            <SlideToSubmit onSubmit={handleSubmit} isLoading={isLoading} />
           </form>
         </CardContent>
       </Card>
