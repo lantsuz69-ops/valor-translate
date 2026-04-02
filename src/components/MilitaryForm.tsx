@@ -19,9 +19,7 @@ const MilitaryForm = ({ onResult, isLoading, setIsLoading }: MilitaryFormProps) 
   const [role, setRole] = useState("");
   const [responsibilities, setResponsibilities] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     if (!role.trim() || !responsibilities.trim() || !fullName.trim()) {
       toast.error("נא למלא את כל השדות");
       return;
