@@ -11,8 +11,8 @@ interface ResultsSectionProps {
 }
 
 const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
-  const handleGeneratePDF = () => {
-    generateResumePDF(result, formData.fullName);
+  const handleGeneratePDF = async () => {
+    await generateResumePDF(result, formData.fullName);
   };
 
   return (
