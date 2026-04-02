@@ -58,7 +58,7 @@ const MilitaryForm = ({ onResult, isLoading, setIsLoading }: MilitaryFormProps) 
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="fullName" className="text-foreground">שם מלא</Label>
               <Input
@@ -95,24 +95,7 @@ const MilitaryForm = ({ onResult, isLoading, setIsLoading }: MilitaryFormProps) 
               />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full gap-2"
-              size="lg"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  מתרגם...
-                </>
-              ) : (
-                <>
-                  <Send className="h-5 w-5" />
-                  תרגם לשפה מקצועית
-                </>
-              )}
-            </Button>
+            <SlideToSubmit onSubmit={handleSubmit} isLoading={isLoading} />
           </form>
         </CardContent>
       </Card>
