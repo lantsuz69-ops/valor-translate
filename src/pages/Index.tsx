@@ -1,16 +1,36 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import HeroSection from "@/components/HeroSection";
+import MilitaryForm from "@/components/MilitaryForm";
+import ResultsSection from "@/components/ResultsSection";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+export interface TranslationResult {
+  title: string;
+  summary: string;
+  skills: string[];
+  experience: string[];
+}
+
+const Index = () => {
+  const [result, setResult] = useState<TranslationResult | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState<{ fullName: string; role: string; responsibilities: string } | null>(null);
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background">
+      <HeroSection />
+      <MilitaryForm
+        onResult={(data, form) => {
+          setResult(data);
+          setFormData(form);
+        }}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+      />
+      {result && formData && (
+        <ResultsSection result={result} formData={formData} />
+      )}
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
