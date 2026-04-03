@@ -58,5 +58,18 @@ const Index = () => {
     </div>
   );
 };
-
+{/* Footer של המסמך - הגדלנו נוכחות כדי שייקלט בצילום ה-PDF */}
+<div className="mt-20 pt-10 border-t-2 border-slate-100 flex items-center justify-between">
+   <div className="flex items-center gap-3 text-emerald-600">
+      <CheckCircle2 className="h-6 w-6" />
+      <span className="font-bold text-sm">Skill-Bridge / מערכת ניתוח יכולות 2026</span>
+   </div>
+   
+   {/* הוספתי כאן Class של 'block' וצבע כהה יותר כדי שהקנבס יזהה את הטקסט בוודאות */}
+   <div className="text-right">
+     <p className="text-slate-900 font-mono text-[10px] font-bold uppercase tracking-wider block">
+       מזהה מערכת: SB-ALPHA-V1
+     </p>
+   </div>
+</div>
 export default Index;
