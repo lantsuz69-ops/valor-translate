@@ -1,7 +1,6 @@
-import { useState, useRef } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Send, Loader2, ChevronLeft } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface SlideToSubmitProps {
   onSubmit: () => void;
@@ -17,23 +16,38 @@ const SlideToSubmit = ({
   const [isComplete, setIsComplete] = useState(false);
   const x = useMotionValue(0);
   
-  // באזור ה-RTL שלנו, אנחנו גוררים ימינה לשמאל (מספרים שליליים ב-framer)
-  // אנחנו מודדים את התקדמות הגרירה מ-0 עד -240 פיקסלים בערך
   const opacity = useTransform(x, [0, -150], [1, 0]);
-  const colorTransform = useTransform(x, [0, -200], ["#ffffff", "#22c55e"]);
+
+  // מנגנון ריסט: אם הטעינה הסתיימה או שלא התחילה (כי השדות היו ריקים)
+  useEffect(() => {
+    if (!isLoading && isComplete) {
+      setIsComplete(false);
+      animate(x, 0, { type: "spring", stiffness: 300, damping: 30 });
+    }
+  }, [isLoading, isComplete, x]);
 
   const handleDragEnd = (_: any, info: any) => {
-    // אם הגרירה עברה את ה-200 פיקסלים לכיוון שמאל (RTL)
-    if (info.offset.x < -180) {
+    // ב-RTL גרירה שמאלה היא מספר שלילי
+    if (info.offset.x < -150) {
       setIsComplete(true);
       onSubmit();
+      
+      // הגנה למקרה שה-onSubmit לא הפעיל isLoading (למשל אם שדות ריקים)
+      // אנחנו נותנים לזה 500ms ואז מחזירים את הכפתור אם לא התחילה טעינה
+      setTimeout(() => {
+        if (!isLoading) {
+          setIsComplete(false);
+          animate(x, 0, { type: "spring", stiffness: 300, damping: 30 });
+        }
+      }, 500);
+    } else {
+      animate(x, 0, { type: "spring", stiffness: 500, damping: 30 });
     }
   };
 
   return (
     <div className="relative h-16 w-full max-w-[350px] rounded-full bg-[#1A1A1A] border border-white/10 p-2 overflow-hidden flex items-center shadow-inner">
       
-      {/* טקסט רקע שנעלם בגרירה */}
       <motion.div 
         style={{ opacity }}
         className="absolute inset-0 flex items-center justify-center pointer-events-none"
@@ -44,13 +58,11 @@ const SlideToSubmit = ({
         </div>
       </motion.div>
 
-      {/* העיגול הנגרר (The Thumb) */}
       {!isLoading && !isComplete && (
         <motion.div
           drag="x"
           dragConstraints={{ left: -245, right: 0 }}
           dragElastic={0.1}
-          dragSnapToOrigin={false}
           style={{ x }}
           onDragEnd={handleDragEnd}
           whileHover={{ scale: 1.05 }}
@@ -61,7 +73,6 @@ const SlideToSubmit = ({
         </motion.div>
       )}
 
-      {/* מצב טעינה */}
       {(isLoading || isComplete) && (
         <motion.div 
           initial={{ opacity: 0 }}
@@ -69,11 +80,10 @@ const SlideToSubmit = ({
           className="w-full flex justify-center items-center gap-3 text-white"
         >
           <Loader2 className="h-5 w-5 animate-spin" />
-          <span className="text-sm font-bold tracking-widest uppercase italic">מנתח יכולות...</span>
+          <span className="text-sm font-bold tracking-widest uppercase italic">מעבד...</span>
         </motion.div>
       )}
 
-      {/* אפקט מילוי בזמן גרירה */}
       <motion.div 
         style={{ width: useTransform(x, [0, -245], ["0%", "100%"]) }}
         className="absolute right-0 top-0 bottom-0 bg-white/5 pointer-events-none"
