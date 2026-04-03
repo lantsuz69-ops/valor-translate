@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import HeroSection from "@/components/HeroSection";
 import MilitaryForm from "@/components/MilitaryForm";
 import ResultsSection from "@/components/ResultsSection";
@@ -11,9 +12,17 @@ export interface TranslationResult {
 }
 
 const Index = () => {
-  const [result, setResult] = useState<TranslationResult | null>(null);
+  const location = useLocation();
+  const returnData = (location.state as any)?.returnData as {
+    result: TranslationResult;
+    formData: { fullName: string; role: string; responsibilities: string };
+  } | undefined;
+
+  const [result, setResult] = useState<TranslationResult | null>(returnData?.result ?? null);
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState<{ fullName: string; role: string; responsibilities: string } | null>(null);
+  const [formData, setFormData] = useState<{ fullName: string; role: string; responsibilities: string } | null>(
+    returnData?.formData ?? null
+  );
   const resultsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,7 +32,7 @@ const Index = () => {
   }, [result]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#121212]">
       <HeroSection />
       <MilitaryForm
         onResult={(data, form) => {
@@ -32,6 +41,7 @@ const Index = () => {
         }}
         isLoading={isLoading}
         setIsLoading={setIsLoading}
+        initialData={formData}
       />
       {result && formData && (
         <div ref={resultsRef}>

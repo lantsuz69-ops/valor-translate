@@ -2,29 +2,24 @@ import { Sparkles } from "lucide-react";
 
 const HeroSection = () => {
   return (
-    <section className="relative overflow-hidden bg-primary py-20 md:py-32">
+    <section className="relative overflow-hidden bg-[#121212] py-20 md:py-32">
       {/* Decorative background */}
       <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 right-10 h-64 w-64 rounded-full bg-primary-foreground blur-3xl" />
-        <div className="absolute bottom-10 left-10 h-48 w-48 rounded-full bg-primary-foreground blur-3xl" />
+        <div className="absolute top-10 right-10 h-64 w-64 rounded-full bg-white/20 blur-3xl" />
+        <div className="absolute bottom-10 left-10 h-48 w-48 rounded-full bg-white/20 blur-3xl" />
       </div>
 
       <div className="container relative mx-auto px-4 text-center">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-2 text-primary-foreground">
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-white">
           <Sparkles className="h-4 w-4" />
           <span className="text-sm font-medium">מונע בינה מלאכותית</span>
         </div>
 
-        <h1 className="mb-6 text-4xl font-extrabold leading-tight text-primary-foreground md:text-6xl">
-          Skill-Bridge
+        <h1 className="mb-6 text-3xl font-extrabold leading-tight text-white md:text-5xl">
+          מהשטח לניהול: תרגם את השירות הקרבי שלך לקריירה בהייטק
         </h1>
-        <p className="mb-4 text-2xl font-bold text-primary-foreground/90 md:text-3xl">
-          גשר המיומנויות
-        </p>
-        <p className="mx-auto max-w-2xl text-lg text-primary-foreground/75 md:text-xl">
-          המרת הניסיון הצבאי שלך לשפה מקצועית של ניהול פרויקטים —
-          <br className="hidden md:block" />
-          קורות חיים מוכנים בלחיצת כפתור
+        <p className="mx-auto max-w-2xl text-lg text-white/70 md:text-xl">
+          הפוך ניסיון פיקודי ומבצעי לקורות חיים מקצועיים תוך 60 שניות
         </p>
       </div>
     </section>
