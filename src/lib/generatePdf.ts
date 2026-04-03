@@ -35,11 +35,11 @@ export async function generateResumePDF(result: TranslationResult, fullName: str
     </div>
 
     <div style="margin-bottom: 20px;">
-      <h2 style="color: #2563eb; font-size: 17px; font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 6px; margin: 0 0 10px 0;">ניסיון מקצועי</h2>
+      <h2 style="color: ${primaryColor}; font-size: 17px; font-weight: 700; border-bottom: 2px solid ${primaryColor}; padding-bottom: 6px; margin: 0 0 10px 0;">ניסיון מקצועי</h2>
       <ul style="list-style: none; padding: 0; margin: 0;">
         ${result.experience.map(item => `
           <li style="font-size: 13px; line-height: 1.7; margin-bottom: 6px; padding-right: 16px; position: relative; color: #334155;">
-            <span style="position: absolute; right: 0; top: 8px; width: 6px; height: 6px; background: #2563eb; border-radius: 50;"></span>
+            <span style="position: absolute; right: 0; top: 8px; width: 6px; height: 6px; background: ${primaryColor}; border-radius: 50%;"></span>
             ${item}
           </li>
         `).join("")}
