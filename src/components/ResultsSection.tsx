@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CheckCircle2, Award, Target, Download } from "lucide-react";
+import { CheckCircle2, Target, Download } from "lucide-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -22,9 +22,8 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
     const element = document.getElementById("cv-card");
     if (!element) return;
 
-    // יצירת "צילום" של הקורות חיים בלבד
     const canvas = await html2canvas(element, {
-      scale: 2, // איכות גבוהה
+      scale: 2,
       useCORS: true,
       logging: false,
       backgroundColor: "#ffffff"
@@ -37,22 +36,19 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
       format: "a4"
     });
 
-    const imgWidth = 210; // רוחב A4 במ"מ
+    const imgWidth = 210;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
     pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-    pdf.save(`${formData.fullName}_CV.pdf`);
+    pdf.save(`קורות_חיים_${formData.fullName}.pdf`);
   };
 
   return (
     <div dir="rtl" className="grid grid-cols-1 lg:grid-cols-12 gap-8 text-right">
       
-      {/* Sidebar - לא ייכנס ל-PDF */}
+      {/* Sidebar - ללא הריבוע הלבן */}
       <div className="lg:col-span-4 space-y-6">
         <div className="bg-slate-900/50 border border-slate-800 p-8 rounded-[2rem] backdrop-blur-xl">
-          <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-            <Award className="h-8 w-8 text-black" />
-          </div>
           <h2 className="text-2xl font-black text-white mb-2">{formData.fullName}</h2>
           <p className="text-slate-400 font-mono text-xs uppercase tracking-widest">{formData.role}</p>
           
@@ -66,9 +62,9 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
         </div>
 
         <div className="bg-slate-900/50 border border-slate-800 p-8 rounded-[2rem]">
-          <h3 className="text-white font-bold mb-6 flex items-center gap-2 font-sans">
+          <h3 className="text-white font-bold mb-6 flex items-center gap-2">
             <Target className="h-4 w-4 text-slate-400" />
-            מיומנויות ליבה
+            מיומנויות וכישורים
           </h3>
           <div className="flex flex-wrap gap-2">
             {result.skills.map((skill) => (
@@ -80,7 +76,7 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
         </div>
       </div>
 
-      {/* Main Content - זה החלק שייכנס ל-PDF הודות ל-ID cv-card */}
+      {/* Main Content - עברית מלאה */}
       <div className="lg:col-span-8">
         <div 
           id="cv-card" 
@@ -88,21 +84,21 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
         >
           <div className="flex justify-between items-start mb-12 border-b border-slate-100 pb-10">
             <div>
-                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2">Target Professional Role</span>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2 font-mono">הגדרת תפקיד יעד</span>
                 <h1 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">{result.title}</h1>
                 <p className="text-xl text-slate-500 font-bold mt-2">{formData.fullName}</p>
             </div>
           </div>
 
           <div className="mb-14">
-            <h3 className="text-slate-400 font-mono text-[10px] uppercase tracking-[0.2em] mb-6 font-sans">Executive Summary</h3>
+            <h3 className="text-slate-400 font-mono text-[10px] uppercase tracking-[0.2em] mb-6">תמצית מקצועית</h3>
             <p className="text-xl md:text-2xl text-slate-800 font-medium leading-relaxed italic pr-4 border-r-4 border-slate-900">
               "{result.summary}"
             </p>
           </div>
 
           <div className="space-y-10">
-            <h3 className="text-slate-400 font-mono text-[10px] uppercase tracking-[0.2em] font-sans">Professional Experience & Capabilities</h3>
+            <h3 className="text-slate-400 font-mono text-[10px] uppercase tracking-[0.2em]">ניסיון מקצועי ויכולות ליבה</h3>
             {result.experience.map((exp, i) => (
               <div key={i} className="flex gap-8 items-start group">
                 <div className="mt-1 h-8 w-8 rounded-xl bg-slate-900 flex items-center justify-center shrink-0 text-white font-mono text-xs font-bold">
@@ -118,9 +114,9 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
           <div className="mt-20 pt-10 border-t border-slate-100 flex items-center justify-between">
              <div className="flex items-center gap-3 text-emerald-600 font-bold text-sm">
                 <CheckCircle2 className="h-6 w-6" />
-                <span className="font-sans">Skill-Bridge Certified Profile / 2026</span>
+                <span>Skill-Bridge / מערכת ניתוח יכולות 2026</span>
              </div>
-             <p className="text-slate-300 font-mono text-[9px] uppercase tracking-tighter">System ID: SB-ALPHA-V1</p>
+             <p className="text-slate-300 font-mono text-[9px] uppercase tracking-tighter">מזהה מערכת: SB-ALPHA-V1</p>
           </div>
         </div>
       </div>
