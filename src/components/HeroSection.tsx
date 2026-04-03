@@ -9,7 +9,7 @@ const HeroSection = () => {
           <span className="text-slate-500 italic font-light italic">לניסיון אזרחי</span>
         </h1>
         <p className="mt-6 max-w-xl mx-auto text-lg md:text-xl text-slate-400 font-medium">
-          המערכת מנגישה את שפת ההייטק משפת השטח, בצורה הטובה ביותר.
+          המערכת מתרגמת את שפת ההייטק משפת השטח, בצורה הטובה ביותר.
         </p>
       </motion.div>
     </section>
