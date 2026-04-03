@@ -2,7 +2,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import type { TranslationResult } from "@/pages/Index";
 
-export async function generateResumePDF(result: TranslationResult, fullName: string) {
+export async function generateResumePDF(result: TranslationResult, fullName: string, primaryColor: string = "#2563eb") {
   // Create a hidden container with the resume layout
   const container = document.createElement("div");
   container.id = "resume-pdf-render";
@@ -17,29 +17,29 @@ export async function generateResumePDF(result: TranslationResult, fullName: str
   `;
 
   container.innerHTML = `
-    <div style="background: #2563eb; padding: 28px 36px; border-radius: 8px; margin-bottom: 24px;">
+    <div style="background: ${primaryColor}; padding: 28px 36px; border-radius: 8px; margin-bottom: 24px;">
       <h1 style="color: white; font-size: 28px; font-weight: 800; margin: 0 0 6px 0;">${fullName}</h1>
       <p style="color: rgba(255,255,255,0.85); font-size: 16px; margin: 0;">${result.title}</p>
     </div>
 
     <div style="margin-bottom: 20px;">
-      <h2 style="color: #2563eb; font-size: 17px; font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 6px; margin: 0 0 10px 0;">תקציר מקצועי</h2>
+      <h2 style="color: ${primaryColor}; font-size: 17px; font-weight: 700; border-bottom: 2px solid ${primaryColor}; padding-bottom: 6px; margin: 0 0 10px 0;">תקציר מקצועי</h2>
       <p style="font-size: 13px; line-height: 1.7; margin: 0; color: #334155;">${result.summary}</p>
     </div>
 
     <div style="margin-bottom: 20px;">
-      <h2 style="color: #2563eb; font-size: 17px; font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 6px; margin: 0 0 10px 0;">כישורים מקצועיים</h2>
+      <h2 style="color: ${primaryColor}; font-size: 17px; font-weight: 700; border-bottom: 2px solid ${primaryColor}; padding-bottom: 6px; margin: 0 0 10px 0;">כישורים מקצועיים</h2>
       <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-        ${result.skills.map(s => `<span style="background: #eff6ff; color: #1e40af; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;">${s}</span>`).join("")}
+        ${result.skills.map(s => `<span style="background: ${primaryColor}15; color: ${primaryColor}; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;">${s}</span>`).join("")}
       </div>
     </div>
 
     <div style="margin-bottom: 20px;">
-      <h2 style="color: #2563eb; font-size: 17px; font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 6px; margin: 0 0 10px 0;">ניסיון מקצועי</h2>
+      <h2 style="color: ${primaryColor}; font-size: 17px; font-weight: 700; border-bottom: 2px solid ${primaryColor}; padding-bottom: 6px; margin: 0 0 10px 0;">ניסיון מקצועי</h2>
       <ul style="list-style: none; padding: 0; margin: 0;">
         ${result.experience.map(item => `
           <li style="font-size: 13px; line-height: 1.7; margin-bottom: 6px; padding-right: 16px; position: relative; color: #334155;">
-            <span style="position: absolute; right: 0; top: 8px; width: 6px; height: 6px; background: #2563eb; border-radius: 50;"></span>
+            <span style="position: absolute; right: 0; top: 8px; width: 6px; height: 6px; background: ${primaryColor}; border-radius: 50%;"></span>
             ${item}
           </li>
         `).join("")}
