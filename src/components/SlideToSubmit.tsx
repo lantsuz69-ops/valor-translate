@@ -1,145 +1,83 @@
-import { useState, useRef, useCallback, useEffect } from "react";
-import { Send, Loader2, ChevronRight } from "lucide-react";
+import { useState, useRef } from "react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
+import { Send, Loader2, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SlideToSubmitProps {
   onSubmit: () => void;
   isLoading: boolean;
   label?: string;
-  loadingLabel?: string;
 }
 
 const SlideToSubmit = ({
   onSubmit,
   isLoading,
-  label = "החלק כדי לתרגם",
-  loadingLabel = "מתרגם...",
+  label = "החלק לניתוח הניסיון",
 }: SlideToSubmitProps) => {
-  const [dragX, setDragX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const startXRef = useRef(0);
-  const trackWidthRef = useRef(0);
-  const thumbSize = 56;
+  const [isComplete, setIsComplete] = useState(false);
+  const x = useMotionValue(0);
+  
+  // באזור ה-RTL שלנו, אנחנו גוררים ימינה לשמאל (מספרים שליליים ב-framer)
+  // אנחנו מודדים את התקדמות הגרירה מ-0 עד -240 פיקסלים בערך
+  const opacity = useTransform(x, [0, -150], [1, 0]);
+  const colorTransform = useTransform(x, [0, -200], ["#ffffff", "#22c55e"]);
 
-  useEffect(() => {
-    if (!isLoading) setSubmitted(false);
-  }, [isLoading]);
-
-  const getMaxDrag = () => {
-    if (!trackRef.current) return 200;
-    return trackRef.current.offsetWidth - thumbSize - 8;
+  const handleDragEnd = (_: any, info: any) => {
+    // אם הגרירה עברה את ה-200 פיקסלים לכיוון שמאל (RTL)
+    if (info.offset.x < -180) {
+      setIsComplete(true);
+      onSubmit();
+    }
   };
 
-  const handleStart = useCallback((clientX: number) => {
-    if (isLoading || submitted) return;
-    setIsDragging(true);
-    startXRef.current = clientX;
-    trackWidthRef.current = getMaxDrag();
-  }, [isLoading, submitted]);
-
-  const handleMove = useCallback((clientX: number) => {
-    if (!isDragging) return;
-    // RTL: dragging left means negative clientX delta
-    const delta = startXRef.current - clientX;
-    const clamped = Math.max(0, Math.min(delta, trackWidthRef.current));
-    setDragX(clamped);
-  }, [isDragging]);
-
-  const handleEnd = useCallback(() => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    const max = trackWidthRef.current;
-    if (dragX > max * 0.85) {
-      setSubmitted(true);
-      setDragX(max);
-      onSubmit();
-    } else {
-      setDragX(0);
-    }
-  }, [isDragging, dragX, onSubmit]);
-
-  // Mouse events
-  const onMouseDown = (e: React.MouseEvent) => handleStart(e.clientX);
-  const onMouseMove = (e: React.MouseEvent) => handleMove(e.clientX);
-  const onMouseUp = () => handleEnd();
-
-  // Touch events
-  const onTouchStart = (e: React.TouchEvent) => handleStart(e.touches[0].clientX);
-  const onTouchMove = (e: React.TouchEvent) => handleMove(e.touches[0].clientX);
-  const onTouchEnd = () => handleEnd();
-
-  useEffect(() => {
-    if (!isDragging) return;
-    const onUp = () => handleEnd();
-    window.addEventListener("mouseup", onUp);
-    window.addEventListener("touchend", onUp);
-    return () => {
-      window.removeEventListener("mouseup", onUp);
-      window.removeEventListener("touchend", onUp);
-    };
-  }, [isDragging, handleEnd]);
-
-  const max = getMaxDrag();
-  const progress = max > 0 ? dragX / max : 0;
-
   return (
-    <div
-      ref={trackRef}
-      className={cn(
-        "relative h-14 w-full rounded-full bg-primary/10 border-2 border-primary/20 select-none overflow-hidden",
-        "transition-colors",
-        isDragging && "border-primary/40",
-        submitted && "border-primary/60 bg-primary/20"
-      )}
-      onMouseMove={onMouseMove}
-      onTouchMove={onTouchMove}
-    >
-      {/* Progress fill */}
-      <div
-        className="absolute inset-y-0 right-0 bg-primary/15 rounded-full transition-none"
-        style={{ width: `${dragX + thumbSize + 8}px` }}
-      />
-
-      {/* Label */}
-      <div
+    <div className="relative h-16 w-full max-w-[350px] rounded-full bg-[#1A1A1A] border border-white/10 p-2 overflow-hidden flex items-center shadow-inner">
+      
+      {/* טקסט רקע שנעלם בגרירה */}
+      <motion.div 
+        style={{ opacity }}
         className="absolute inset-0 flex items-center justify-center pointer-events-none"
-        style={{ opacity: isLoading ? 0 : 1 - progress * 1.5 }}
       >
-        <div className="flex items-center gap-2 text-primary font-medium">
-          <ChevronRight className="h-4 w-4 animate-pulse rtl:rotate-180" />
-          <span>{label}</span>
-          <ChevronRight className="h-4 w-4 animate-pulse rtl:rotate-180" />
+        <div className="flex items-center gap-2 text-white/40 font-medium">
+          <ChevronLeft className="h-4 w-4 animate-pulse" />
+          <span className="text-sm tracking-wide">{label}</span>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Loading state */}
-      {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="flex items-center gap-2 text-primary font-medium">
-            <Loader2 className="h-5 w-5 animate-spin" />
-            <span>{loadingLabel}</span>
-          </div>
-        </div>
-      )}
-
-      {/* Thumb */}
-      {!isLoading && (
-        <div
-          className={cn(
-            "absolute top-1 h-12 w-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center cursor-grab shadow-lg",
-            isDragging && "cursor-grabbing scale-110",
-            !isDragging && !submitted && "transition-all duration-300",
-            submitted && "transition-all duration-200"
-          )}
-          style={{ right: `${4 + dragX}px` }}
-          onMouseDown={onMouseDown}
-          onTouchStart={onTouchStart}
+      {/* העיגול הנגרר (The Thumb) */}
+      {!isLoading && !isComplete && (
+        <motion.div
+          drag="x"
+          dragConstraints={{ left: -245, right: 0 }}
+          dragElastic={0.1}
+          dragSnapToOrigin={false}
+          style={{ x }}
+          onDragEnd={handleDragEnd}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="z-10 h-12 w-12 rounded-full bg-white text-black flex items-center justify-center cursor-grab active:cursor-grabbing shadow-[0_0_15px_rgba(255,255,255,0.2)]"
         >
-          <Send className="h-5 w-5 rtl:-scale-x-100" />
-        </div>
+          <Send className="h-5 w-5" />
+        </motion.div>
       )}
+
+      {/* מצב טעינה */}
+      {(isLoading || isComplete) && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="w-full flex justify-center items-center gap-3 text-white"
+        >
+          <Loader2 className="h-5 w-5 animate-spin" />
+          <span className="text-sm font-bold tracking-widest uppercase italic">מנתח יכולות...</span>
+        </motion.div>
+      )}
+
+      {/* אפקט מילוי בזמן גרירה */}
+      <motion.div 
+        style={{ width: useTransform(x, [0, -245], ["0%", "100%"]) }}
+        className="absolute right-0 top-0 bottom-0 bg-white/5 pointer-events-none"
+      />
     </div>
   );
 };
