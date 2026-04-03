@@ -30,7 +30,7 @@ const MilitaryForm = ({ onResult, isLoading, setIsLoading, initialData }: Milita
 
   const handleSubmit = async () => {
     if (!role.trim() || !responsibilities.trim() || !fullName.trim()) {
-      toast.error("נא למלא את כל השדות");
+      toast.error("נא למלא את כל השדות כדי שנוכל להתחיל בניתוח");
       return;
     }
 
@@ -43,68 +43,70 @@ const MilitaryForm = ({ onResult, isLoading, setIsLoading, initialData }: Milita
 
       if (error) {
         console.error("Function error:", error);
-        toast.error("שגיאה בתרגום. נסה שנית.");
+        toast.error("זיהינו תקלה בתקשורת. נסה שוב.");
         return;
       }
 
       onResult(data as TranslationResult, { fullName, role, responsibilities });
-      toast.success("התרגום הושלם בהצלחה!");
+      toast.success("הנתונים עובדו בהצלחה. הנה הניסיון האזרחי שלך.");
     } catch (err) {
       console.error("Error:", err);
-      toast.error("שגיאה בלתי צפויה. נסה שנית.");
+      toast.error("שגיאה בלתי צפויה.");
     } finally {
-      setIsLoading(false);
+      // אנחנו לא מכבים את ה-Loading כאן, כי ה-Index.tsx מנהל את מסך הטעינה הפסיכולוגי
     }
   };
 
   return (
     <section id="form" className="container mx-auto -mt-12 px-4 pb-16 relative z-10">
-      <Card className="mx-auto max-w-2xl shadow-xl border-0">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-foreground">הזן את הניסיון הצבאי שלך</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            ספר לנו על התפקיד והאחריות שלך בשפה חופשית — הבינה המלאכותית תעשה את השאר
+      <Card className="mx-auto max-w-2xl shadow-2xl border-0 bg-[#1A1A1A] text-white">
+        <CardHeader className="text-right border-b border-white/5 mb-4">
+          <CardTitle className="text-2xl font-bold tracking-tight">פירוט הניסיון המבצעי</CardTitle>
+          <CardDescription className="text-gray-400">
+            תאר את העשייה שלך בשפה חופשית. המערכת תזהה את הערך העסקי המסתתר מאחורי הפעילות.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="fullName" className="text-foreground">שם מלא</Label>
+              <Label htmlFor="fullName" className="text-gray-300">שם מלא</Label>
               <Input
                 id="fullName"
-                placeholder='למשל: ישראל ישראלי'
+                placeholder='ישראל ישראלי'
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="text-right"
+                className="bg-[#222] border-white/10 text-white placeholder:text-gray-600 focus:border-white/20 transition-all"
                 dir="rtl"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="role" className="text-foreground">תפקיד צבאי</Label>
+              <Label htmlFor="role" className="text-gray-300">תפקיד אחרון בשירות</Label>
               <Input
                 id="role"
-                placeholder='למשל: מ"פ בחטיבה מרחבית, קצין תכנון בחיל האוויר'
+                placeholder='למשל: סמ"פ, קצין לוגיסטיקה, מפקד צוות ביחידה טכנולוגית'
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="text-right"
+                className="bg-[#222] border-white/10 text-white placeholder:text-gray-600"
                 dir="rtl"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="responsibilities" className="text-foreground">תחומי אחריות ומשימות</Label>
+              <Label htmlFor="responsibilities" className="text-gray-300">מה עשית בפועל? (ניסיון שדה)</Label>
               <Textarea
                 id="responsibilities"
-                placeholder="תאר את מה שעשית: ניהלתי צוות של 30 חיילים, תכננתי לוחות זמנים לפעילויות, הכנתי תדריכים, טיפלתי בבעיות לוגיסטיות..."
+                placeholder="אל תחסוך בפרטים: ניהול כח אדם, תכנון מבצעי, אחריות על ציוד במיליוני שקלים, עבודה תחת לחץ, קבלת החלטות מהירות..."
                 value={responsibilities}
                 onChange={(e) => setResponsibilities(e.target.value)}
-                className="min-h-[150px] text-right"
+                className="min-h-[150px] bg-[#222] border-white/10 text-white placeholder:text-gray-600 leading-relaxed"
                 dir="rtl"
               />
             </div>
 
-            <SlideToSubmit onSubmit={handleSubmit} isLoading={isLoading} />
+            <div className="pt-4 flex justify-center">
+               <SlideToSubmit onSubmit={handleSubmit} isLoading={isLoading} />
+            </div>
           </form>
         </CardContent>
       </Card>
