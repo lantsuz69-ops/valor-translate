@@ -58,7 +58,7 @@ const Index = () => {
                 onClick={() => setResult(null)} 
                 className="mt-12 mx-auto block text-slate-500 hover:text-white font-mono text-[8px] uppercase tracking-[0.3em] transition-colors"
               >
-                // ניתוח חדש / חזרה לטופס
+                // לחץ כאן ליצירת קורות חיים חדש \\
               </button>
             </motion.div>
           )}
