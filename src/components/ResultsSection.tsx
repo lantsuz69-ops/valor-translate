@@ -51,7 +51,7 @@ const ResultsSection = ({ result, formData }: any) => {
             className="w-full mt-8 flex items-center justify-center gap-3 bg-white text-black h-14 rounded-xl font-bold hover:bg-slate-200 transition-all shadow-lg"
           >
             <Download className="h-5 w-5" />
-            הורד קובץ PDF
+            PDF הורד כ-קובץ 
           </button>
         </div>
 
