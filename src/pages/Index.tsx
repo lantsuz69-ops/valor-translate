@@ -34,7 +34,9 @@ const Index = () => {
         setIsLoading={setIsLoading}
       />
       {result && formData && (
-        <ResultsSection result={result} formData={formData} />
+        <div ref={resultsRef}>
+          <ResultsSection result={result} formData={formData} />
+        </div>
       )}
     </div>
   );
