@@ -12,9 +12,7 @@ interface ResultsSectionProps {
 }
 
 const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
-  const handleGeneratePDF = async () => {
-    await generateResumePDF(result, formData.fullName);
-  };
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   return (
     <section className="container mx-auto px-4 pb-20">
