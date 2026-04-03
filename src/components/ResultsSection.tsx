@@ -1,10 +1,43 @@
 import { motion } from "framer-motion";
-import { CheckCircle2, Briefcase, Target, Award } from "lucide-react";
+import { CheckCircle2, Award, Target, Download, FileText } from "lucide-react";
+import jsPDF from "jspdf";
 
 const ResultsSection = ({ result, formData }: any) => {
+  
+  const downloadPDF = () => {
+    const doc = new jsPDF({
+      orientation: "p",
+      unit: "mm",
+      format: "a4"
+    });
+
+    // הגדרות בסיסיות (עברית ב-PDF דורשת פונט תומך, כרגע נשתמש במבנה נקי)
+    doc.setFontSize(22);
+    doc.text("Professional Profile", 20, 20);
+    
+    doc.setFontSize(16);
+    doc.text(`${formData.fullName} - ${result.title}`, 20, 35);
+    
+    doc.setFontSize(12);
+    doc.text("Executive Summary:", 20, 50);
+    const splitSummary = doc.splitTextToSize(result.summary, 170);
+    doc.text(splitSummary, 20, 60);
+
+    doc.text("Key Experience:", 20, 90);
+    let yPos = 100;
+    result.experience.forEach((exp: string, i: number) => {
+      const splitExp = doc.splitTextToSize(`- ${exp}`, 170);
+      doc.text(splitExp, 20, yPos);
+      yPos += (splitExp.length * 7);
+    });
+
+    doc.save(`${formData.fullName}_CV.pdf`);
+  };
+
   return (
     <div dir="rtl" className="grid grid-cols-1 lg:grid-cols-12 gap-8 text-right">
-      {/* Sidebar - Personal Info */}
+      
+      {/* Sidebar */}
       <div className="lg:col-span-4 space-y-6">
         <div className="bg-slate-900/50 border border-slate-800 p-8 rounded-[2rem] backdrop-blur-xl">
           <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-lg">
@@ -13,12 +46,13 @@ const ResultsSection = ({ result, formData }: any) => {
           <h2 className="text-2xl font-black text-white mb-2">{formData.fullName}</h2>
           <p className="text-slate-400 font-mono text-xs uppercase tracking-widest">{formData.role}</p>
           
-          <div className="mt-8 space-y-4">
-            <div className="p-4 bg-white/5 rounded-xl border border-white/5">
-                <p className="text-[10px] text-slate-500 uppercase font-mono mb-1">Top Capability</p>
-                <p className="text-sm font-bold text-slate-200">Leadership & Command</p>
-            </div>
-          </div>
+          <button 
+            onClick={downloadPDF}
+            className="w-full mt-8 flex items-center justify-center gap-3 bg-white text-black h-14 rounded-xl font-bold hover:bg-slate-200 transition-all shadow-lg"
+          >
+            <Download className="h-5 w-5" />
+            הורד קובץ PDF
+          </button>
         </div>
 
         <div className="bg-slate-900/50 border border-slate-800 p-8 rounded-[2rem]">
@@ -36,7 +70,7 @@ const ResultsSection = ({ result, formData }: any) => {
         </div>
       </div>
 
-      {/* Main Content - Professional Profile */}
+      {/* Main Content */}
       <div className="lg:col-span-8 space-y-8">
         <div className="bg-white p-10 md:p-14 rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]">
           <div className="flex justify-between items-start mb-10 border-b border-slate-100 pb-8">
@@ -44,8 +78,8 @@ const ResultsSection = ({ result, formData }: any) => {
                 <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2">Target Role</span>
                 <h1 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">{result.title}</h1>
             </div>
-            <div className="hidden md:block bg-slate-100 px-4 py-2 rounded-full text-[10px] font-mono font-bold text-slate-500 uppercase tracking-tighter">
-                Verified Skills Audit
+            <div className="hidden md:block">
+                <FileText className="h-8 w-8 text-slate-200" />
             </div>
           </div>
 
@@ -60,9 +94,6 @@ const ResultsSection = ({ result, formData }: any) => {
             <h3 className="text-slate-400 font-mono text-[10px] uppercase tracking-[0.2em]">Professional Experience</h3>
             {result.experience.map((exp: string, i: number) => (
               <motion.div 
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1 }}
                 key={i} 
                 className="flex gap-6 items-start group"
               >
@@ -81,7 +112,7 @@ const ResultsSection = ({ result, formData }: any) => {
                 <CheckCircle2 className="h-5 w-5" />
                 מוכן להגשה למעסיקים
              </div>
-             <p className="text-slate-300 font-mono text-[9px]">DOC_ID: SB-2026-X82</p>
+             <p className="text-slate-300 font-mono text-[9px]">SYSTEM_ID: SB-2026</p>
           </div>
         </div>
       </div>
