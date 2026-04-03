@@ -17,7 +17,7 @@ export async function generateResumePDF(result: TranslationResult, fullName: str
   `;
 
   container.innerHTML = `
-    <div style="background: #2563eb; padding: 28px 36px; border-radius: 8px; margin-bottom: 24px;">
+    <div style="background: ${primaryColor}; padding: 28px 36px; border-radius: 8px; margin-bottom: 24px;">
       <h1 style="color: white; font-size: 28px; font-weight: 800; margin: 0 0 6px 0;">${fullName}</h1>
       <p style="color: rgba(255,255,255,0.85); font-size: 16px; margin: 0;">${result.title}</p>
     </div>
