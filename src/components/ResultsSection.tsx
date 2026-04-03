@@ -87,13 +87,20 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
         </Card>
 
         <Button
-          onClick={handleGeneratePDF}
+          onClick={() => setPreviewOpen(true)}
           size="lg"
           className="w-full gap-2"
         >
-          <FileDown className="h-5 w-5" />
-          הורד קורות חיים (PDF)
+          <Eye className="h-5 w-5" />
+          צפה בקורות חיים (PDF)
         </Button>
+
+        <ResumePreviewModal
+          open={previewOpen}
+          onOpenChange={setPreviewOpen}
+          result={result}
+          fullName={formData.fullName}
+        />
       </div>
     </section>
   );
