@@ -1,44 +1,19 @@
 import { motion } from "framer-motion";
 import { CheckCircle2, Award, Target, Download, FileText } from "lucide-react";
-import jsPDF from "jspdf";
 
 const ResultsSection = ({ result, formData }: any) => {
   
-  const downloadPDF = () => {
-    const doc = new jsPDF({
-      orientation: "p",
-      unit: "mm",
-      format: "a4"
-    });
-
-    // הגדרות בסיסיות (עברית ב-PDF דורשת פונט תומך, כרגע נשתמש במבנה נקי)
-    doc.setFontSize(22);
-    doc.text("Professional Profile", 20, 20);
-    
-    doc.setFontSize(16);
-    doc.text(`${formData.fullName} - ${result.title}`, 20, 35);
-    
-    doc.setFontSize(12);
-    doc.text("Executive Summary:", 20, 50);
-    const splitSummary = doc.splitTextToSize(result.summary, 170);
-    doc.text(splitSummary, 20, 60);
-
-    doc.text("Key Experience:", 20, 90);
-    let yPos = 100;
-    result.experience.forEach((exp: string, i: number) => {
-      const splitExp = doc.splitTextToSize(`- ${exp}`, 170);
-      doc.text(splitExp, 20, yPos);
-      yPos += (splitExp.length * 7);
-    });
-
-    doc.save(`${formData.fullName}_CV.pdf`);
+  const handleDownloadPDF = () => {
+    // הפקודה הזו פותחת את ממשק ההדפסה של הדפדפן
+    // המשתמש פשוט בוחר "שמור כ-PDF" והעיצוב נשמר ב-100%
+    window.print();
   };
 
   return (
-    <div dir="rtl" className="grid grid-cols-1 lg:grid-cols-12 gap-8 text-right">
+    <div dir="rtl" className="grid grid-cols-1 lg:grid-cols-12 gap-8 text-right print:m-0">
       
-      {/* Sidebar */}
-      <div className="lg:col-span-4 space-y-6">
+      {/* Sidebar - נסתיר אותו בהדפסה כדי שרק הקורות חיים ירדו */}
+      <div className="lg:col-span-4 space-y-6 print:hidden">
         <div className="bg-slate-900/50 border border-slate-800 p-8 rounded-[2rem] backdrop-blur-xl">
           <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-lg">
             <Award className="h-8 w-8 text-black" />
@@ -47,11 +22,11 @@ const ResultsSection = ({ result, formData }: any) => {
           <p className="text-slate-400 font-mono text-xs uppercase tracking-widest">{formData.role}</p>
           
           <button 
-            onClick={downloadPDF}
+            onClick={handleDownloadPDF}
             className="w-full mt-8 flex items-center justify-center gap-3 bg-white text-black h-14 rounded-xl font-bold hover:bg-slate-200 transition-all shadow-lg"
           >
             <Download className="h-5 w-5" />
-            PDF הורד כ-קובץ 
+            ייצא לקובץ PDF מוכן
           </button>
         </div>
 
@@ -70,49 +45,43 @@ const ResultsSection = ({ result, formData }: any) => {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="lg:col-span-8 space-y-8">
-        <div className="bg-white p-10 md:p-14 rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)]">
+      {/* Main Content - החלק שיודפס */}
+      <div className="lg:col-span-8 space-y-8 print:w-full print:block">
+        <div id="cv-content" className="bg-white p-10 md:p-14 rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] print:shadow-none print:p-0 print:text-black">
           <div className="flex justify-between items-start mb-10 border-b border-slate-100 pb-8">
             <div>
-                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2">Target Role</span>
+                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2 print:text-slate-500">Target Role</span>
                 <h1 className="text-4xl md:text-5xl font-black text-slate-900 leading-tight">{result.title}</h1>
-            </div>
-            <div className="hidden md:block">
-                <FileText className="h-8 w-8 text-slate-200" />
             </div>
           </div>
 
           <div className="mb-12">
-            <h3 className="text-slate-400 font-mono text-[10px] uppercase tracking-[0.2em] mb-4">Executive Summary</h3>
+            <h3 className="text-slate-400 font-mono text-[10px] uppercase tracking-[0.2em] mb-4 print:text-slate-500">Executive Summary</h3>
             <p className="text-xl md:text-2xl text-slate-800 font-medium leading-relaxed italic">
               "{result.summary}"
             </p>
           </div>
 
           <div className="space-y-8">
-            <h3 className="text-slate-400 font-mono text-[10px] uppercase tracking-[0.2em]">Professional Experience</h3>
+            <h3 className="text-slate-400 font-mono text-[10px] uppercase tracking-[0.2em] print:text-slate-500">Professional Experience</h3>
             {result.experience.map((exp: string, i: number) => (
-              <motion.div 
-                key={i} 
-                className="flex gap-6 items-start group"
-              >
-                <div className="mt-1 h-6 w-6 rounded-full bg-slate-900 flex items-center justify-center shrink-0 text-white font-mono text-[10px] font-bold">
+              <div key={i} className="flex gap-6 items-start">
+                <div className="mt-1 h-6 w-6 rounded-full bg-slate-900 flex items-center justify-center shrink-0 text-white font-mono text-[10px] font-bold print:bg-black">
                   0{i + 1}
                 </div>
-                <p className="text-lg text-slate-700 font-semibold leading-snug group-hover:text-black transition-colors">
+                <p className="text-lg text-slate-700 font-semibold leading-snug">
                   {exp}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </div>
           
-          <div className="mt-16 pt-8 border-t border-slate-100 flex items-center justify-between">
-             <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm">
+          <div className="mt-16 pt-8 border-t border-slate-100 flex items-center justify-between print:mt-10">
+             <div className="flex items-center gap-2 text-emerald-600 font-bold text-sm print:text-black">
                 <CheckCircle2 className="h-5 w-5" />
-                מוכן להגשה למעסיקים
+                Skill-Bridge Certified Profile
              </div>
-             <p className="text-slate-300 font-mono text-[9px]">SYSTEM_ID: SB-2026</p>
+             <p className="text-slate-300 font-mono text-[9px] print:text-slate-400">SYSTEM_ID: SB-2026</p>
           </div>
         </div>
       </div>
