@@ -28,9 +28,9 @@ export async function generateResumePDF(result: TranslationResult, fullName: str
     </div>
 
     <div style="margin-bottom: 20px;">
-      <h2 style="color: #2563eb; font-size: 17px; font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 6px; margin: 0 0 10px 0;">כישורים מקצועיים</h2>
+      <h2 style="color: ${primaryColor}; font-size: 17px; font-weight: 700; border-bottom: 2px solid ${primaryColor}; padding-bottom: 6px; margin: 0 0 10px 0;">כישורים מקצועיים</h2>
       <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-        ${result.skills.map(s => `<span style="background: #eff6ff; color: #1e40af; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;">${s}</span>`).join("")}
+        ${result.skills.map(s => `<span style="background: ${primaryColor}15; color: ${primaryColor}; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 500;">${s}</span>`).join("")}
       </div>
     </div>
 
