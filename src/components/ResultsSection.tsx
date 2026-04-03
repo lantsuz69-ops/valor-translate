@@ -90,3 +90,21 @@ const ResultsSection = ({ result, formData }: any) => {
 };
 
 export default ResultsSection;
+const ResultsSection = ({ result, formData }: any) => {
+  return (
+    <>
+      {/* הזרקת סטייל ייעודי להדפסה */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          @page { margin: 0; }
+          body { padding: 1.5cm; background: white !important; }
+          .no-print { display: none !important; }
+        }
+      `}} />
+
+      <div dir="rtl" className="grid grid-cols-1 lg:grid-cols-12 gap-8 text-right">
+        {/* שאר הקוד שלך... */}
+      </div>
+    </>
+  );
+};
