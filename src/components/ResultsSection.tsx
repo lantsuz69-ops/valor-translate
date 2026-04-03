@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FileDown, Briefcase, Star, ListChecks } from "lucide-react";
-import { generateResumePDF } from "@/lib/generatePdf";
+import { Eye, Briefcase, Star, ListChecks } from "lucide-react";
+import ResumePreviewModal from "@/components/ResumePreviewModal";
 import type { TranslationResult } from "@/pages/Index";
 
 interface ResultsSectionProps {
