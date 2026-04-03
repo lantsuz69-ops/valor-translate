@@ -14,6 +14,13 @@ const Index = () => {
   const [result, setResult] = useState<TranslationResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<{ fullName: string; role: string; responsibilities: string } | null>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (result && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [result]);
 
   return (
     <div className="min-h-screen bg-background">
