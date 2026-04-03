@@ -28,7 +28,7 @@ const MilitaryForm = ({ onSubmit, isLoading }: any) => {
           <div className="space-y-3">
             <Label className="text-[10px] font-mono uppercase text-slate-500 tracking-[0.2em]">תפקיד / דרגה</Label>
             <Input 
-                placeholder="מפקד צוות"
+                placeholder="מפקד חטיבה 7 \ מפקד צוות"
                 className="bg-[#1E293B] border-slate-700 text-white h-14 rounded-2xl focus:ring-slate-500" 
                 onChange={(e) => setFormData({...formData, role: e.target.value})}
             />
