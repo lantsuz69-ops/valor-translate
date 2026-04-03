@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Eye, Briefcase, Star, ListChecks } from "lucide-react";
-import ResumePreviewModal from "@/components/ResumePreviewModal";
 import type { TranslationResult } from "@/pages/Index";
 
 interface ResultsSectionProps {
@@ -12,10 +11,14 @@ interface ResultsSectionProps {
 }
 
 const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
-  const [previewOpen, setPreviewOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handlePreview = () => {
+    navigate("/preview", { state: { result, formData } });
+  };
 
   return (
-    <section className="container mx-auto px-4 pb-20">
+    <section id="results" className="container mx-auto px-4 pb-20">
       <div className="mx-auto max-w-2xl space-y-6">
         <Card className="border-0 shadow-lg">
           <CardHeader>
@@ -87,20 +90,13 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
         </Card>
 
         <Button
-          onClick={() => setPreviewOpen(true)}
+          onClick={handlePreview}
           size="lg"
           className="w-full gap-2"
         >
           <Eye className="h-5 w-5" />
           צפה בקורות חיים (PDF)
         </Button>
-
-        <ResumePreviewModal
-          open={previewOpen}
-          onOpenChange={setPreviewOpen}
-          result={result}
-          fullName={formData.fullName}
-        />
       </div>
     </section>
   );
