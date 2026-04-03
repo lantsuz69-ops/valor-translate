@@ -2,7 +2,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import type { TranslationResult } from "@/pages/Index";
 
-export async function generateResumePDF(result: TranslationResult, fullName: string) {
+export async function generateResumePDF(result: TranslationResult, fullName: string, primaryColor: string = "#2563eb") {
   // Create a hidden container with the resume layout
   const container = document.createElement("div");
   container.id = "resume-pdf-render";
