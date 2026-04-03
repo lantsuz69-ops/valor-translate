@@ -23,7 +23,7 @@ export async function generateResumePDF(result: TranslationResult, fullName: str
     </div>
 
     <div style="margin-bottom: 20px;">
-      <h2 style="color: #2563eb; font-size: 17px; font-weight: 700; border-bottom: 2px solid #2563eb; padding-bottom: 6px; margin: 0 0 10px 0;">תקציר מקצועי</h2>
+      <h2 style="color: ${primaryColor}; font-size: 17px; font-weight: 700; border-bottom: 2px solid ${primaryColor}; padding-bottom: 6px; margin: 0 0 10px 0;">תקציר מקצועי</h2>
       <p style="font-size: 13px; line-height: 1.7; margin: 0; color: #334155;">${result.summary}</p>
     </div>
 
