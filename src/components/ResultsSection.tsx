@@ -108,3 +108,62 @@ const ResultsSection = ({ result, formData }: any) => {
     </>
   );
 };
+const ResultsSection = ({ result, formData }: any) => {
+  
+  const handleDownloadPDF = () => {
+    window.print();
+  };
+
+  return (
+    // הוספנו "print:bg-white" כדי לוודא שהרקע ב-PDF תמיד לבן
+    <div dir="rtl" className="grid grid-cols-1 lg:grid-cols-12 gap-8 text-right print:block print:bg-white">
+      
+      {/* 1. ה-Sidebar - נעלם לחלוטין בהדפסה */}
+      <div className="lg:col-span-4 space-y-6 print:hidden">
+        <div className="bg-slate-900/50 border border-slate-800 p-8 rounded-[2rem] backdrop-blur-xl">
+          <h2 className="text-2xl font-black text-white mb-2">{formData.fullName}</h2>
+          <button 
+            onClick={handleDownloadPDF}
+            className="w-full mt-8 flex items-center justify-center gap-3 bg-white text-black h-14 rounded-xl font-bold shadow-lg"
+          >
+            <Download className="h-5 w-5" />
+            ייצא לקובץ PDF מוכן
+          </button>
+        </div>
+        {/* שאר תוכן ה-Sidebar... */}
+      </div>
+
+      {/* 2. תוכן הקורות חיים - היחיד שנשאר */}
+      <div className="lg:col-span-8 print:w-full">
+        <div className="bg-white p-10 md:p-14 rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] print:shadow-none print:p-0">
+          
+          {/* כאן נמצא כל תוכן ה-CV (שם, תפקיד, ניסיון) */}
+          <div className="border-b border-slate-100 pb-8 mb-10">
+              <h1 className="text-4xl font-black text-slate-900">{result.title}</h1>
+              <p className="text-slate-500 font-bold mt-2">{formData.fullName}</p>
+          </div>
+
+          <div className="mb-12">
+            <h3 className="text-slate-400 font-mono text-[10px] uppercase mb-4">Executive Summary</h3>
+            <p className="text-xl text-slate-800 font-medium leading-relaxed italic">"{result.summary}"</p>
+          </div>
+
+          <div className="space-y-8">
+            {result.experience.map((exp: string, i: number) => (
+              <div key={i} className="flex gap-4">
+                <div className="h-6 w-6 rounded-full bg-black flex items-center justify-center shrink-0 text-white text-[10px] font-bold">0{i+1}</div>
+                <p className="text-lg text-slate-700 font-semibold">{exp}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer של המסמך - מופיע גם ב-PDF */}
+          <div className="mt-16 pt-8 border-t border-slate-100 flex items-center justify-between">
+             <p className="text-emerald-600 font-bold text-sm">Skill-Bridge Certified</p>
+             <p className="text-slate-300 font-mono text-[9px]">ID: SB-2026</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
