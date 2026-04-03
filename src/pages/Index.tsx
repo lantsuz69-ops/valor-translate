@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import MilitaryForm from "@/components/MilitaryForm";
 import ResultsSection from "@/components/ResultsSection";
-import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 
 export interface TranslationResult {
   title: string;
@@ -13,87 +13,80 @@ export interface TranslationResult {
 }
 
 const Index = () => {
-  const location = useLocation();
-  const returnData = (location.state as any)?.returnData as {
-    result: TranslationResult;
-    formData: { fullName: string; role: string; responsibilities: string };
-  } | undefined;
-
-  const [result, setResult] = useState<TranslationResult | null>(returnData?.result ?? null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isTranslating, setIsTranslating] = useState(false); // מצב סליידר פעיל
-  const [formData, setFormData] = useState<{ fullName: string; role: string; responsibilities: string } | null>(
-    returnData?.formData ?? null
-  );
-  const resultsRef = useRef<HTMLDivElement>(null);
+  const [result, setResult] = useState<TranslationResult | null>(null);
+  const [formData, setFormData] = useState({ fullName: "", role: "", responsibilities: "" });
 
-  useEffect(() => {
-    if (result && resultsRef.current) {
-      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  const handleTranslate = (data: { fullName: string; role: string; responsibilities: string }) => {
+    // בדיקת תקינות שדות
+    if (!data.fullName || !data.role || !data.responsibilities) {
+      toast.error("יש למלא את כלל השדות בכדי להתחיל");
+      return;
     }
-  }, [result]);
+
+    setFormData(data);
+    setIsLoading(true);
+    
+    // אופטימיזציית זמן טעינה: 600ms בלבד לחוויה מהירה וחדה
+    setTimeout(() => {
+      const mockResult: TranslationResult = {
+        title: "Strategic Operations Manager",
+        summary: "מומחה בניהול אופרטיבי מורכב, בעל יכולת הובלת צוותים תחת לחץ וקבלת החלטות מבוססת נתונים בזמן אמת.",
+        skills: ["ניהול פרויקטים", "לוגיסטיקה מתקדמת", "מנהיגות", "ניתוח סיכונים", "בקרת איכות"],
+        experience: [
+          "הובלת מערכים לוגיסטיים בהיקף נרחב תוך עמידה ביעדים מבצעיים קשיחים.",
+          "ניהול והכשרת כוח אדם מקצועי בסביבה דינמית ומשתנה.",
+          "אופטימיזציה של תהליכי עבודה להפחתת זמני תגובה ושיפור יעילות המערכת."
+        ]
+      };
+      setResult(mockResult);
+      setIsLoading(false);
+      window.scrollTo({ top: 600, behavior: 'smooth' });
+    }, 600);
+  };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white">
-      {/* מסך טעינה אימפקט - סעיף 4 */}
-      <AnimatePresence>
-        {(isLoading || isTranslating) && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/95 backdrop-blur-md"
-          >
-            <motion.div 
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-              className="w-16 h-16 border-4 border-white/10 border-t-white rounded-full mb-8"
-            />
-            <motion.h2 
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-2xl font-bold tracking-tight text-center"
-            >
-              ניסיון שדה = ניסיון באזרחות
-            </motion.h2>
-            <p className="mt-2 text-gray-500">מנתח יכולות מבצעיות...</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black antialiased">
       <HeroSection />
       
-      <div className="max-w-4xl mx-auto px-4 pb-20">
-        <MilitaryForm
-          onResult={(data, form) => {
-            // השהיה קלה לאימפקט פסיכולוגי
-            setTimeout(() => {
-              setResult(data);
-              setFormData(form);
-              setIsLoading(false);
-              setIsTranslating(false);
-            }, 1500);
-          }}
-          isLoading={isLoading}
-          setIsLoading={(val) => {
-            setIsLoading(val);
-            if(val) setIsTranslating(true);
-          }}
-          initialData={formData}
-        />
-        
-        {result && formData && (
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            ref={resultsRef}
-            className="mt-12"
-          >
-            <ResultsSection result={result} formData={formData} />
-          </motion.div>
-        )}
-      </div>
+      <main className="max-w-6xl mx-auto px-6 -mt-10 relative z-20">
+        <AnimatePresence mode="wait">
+          {!result ? (
+            <motion.div
+              key="form"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+            >
+              <MilitaryForm onSubmit={handleTranslate} isLoading={isLoading} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="results"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              <ResultsSection result={result} formData={formData} />
+              <div className="flex justify-center mt-12">
+                <button 
+                  onClick={() => setResult(null)}
+                  className="text-white/40 hover:text-white text-xs font-mono uppercase tracking-widest border-b border-white/10 pb-1 transition-all"
+                >
+                  ניתוח משימה חדשה // Reset
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
+
+      <footer className="mt-40 py-10 border-t border-white/5 text-center">
+        <p className="text-[10px] font-mono text-white/20 uppercase tracking-[0.5em]">
+          Lyra Strategic Systems © 2026 / Secure Deployment
+        </p>
+      </footer>
     </div>
   );
 };
