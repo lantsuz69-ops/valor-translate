@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { FileDown, Briefcase, Star, ListChecks } from "lucide-react";
-import { generateResumePDF } from "@/lib/generatePdf";
+import { Eye, Briefcase, Star, ListChecks } from "lucide-react";
+import ResumePreviewModal from "@/components/ResumePreviewModal";
 import type { TranslationResult } from "@/pages/Index";
 
 interface ResultsSectionProps {
@@ -11,9 +12,7 @@ interface ResultsSectionProps {
 }
 
 const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
-  const handleGeneratePDF = async () => {
-    await generateResumePDF(result, formData.fullName);
-  };
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   return (
     <section className="container mx-auto px-4 pb-20">
@@ -88,13 +87,20 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
         </Card>
 
         <Button
-          onClick={handleGeneratePDF}
+          onClick={() => setPreviewOpen(true)}
           size="lg"
           className="w-full gap-2"
         >
-          <FileDown className="h-5 w-5" />
-          הורד קורות חיים (PDF)
+          <Eye className="h-5 w-5" />
+          צפה בקורות חיים (PDF)
         </Button>
+
+        <ResumePreviewModal
+          open={previewOpen}
+          onOpenChange={setPreviewOpen}
+          result={result}
+          fullName={formData.fullName}
+        />
       </div>
     </section>
   );
