@@ -10,6 +10,8 @@ interface PreviewState {
   formData: { fullName: string; role: string; responsibilities: string };
 }
 
+const topoPattern = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cpath d='M50 50c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.05'/%3E%3Cpath d='M50 120c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.05'/%3E%3Cpath d='M50 190c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.05'/%3E%3Cpath d='M50 260c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.05'/%3E%3Cpath d='M50 330c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.05'/%3E%3Cpath d='M50 400c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.05'/%3E%3Cpath d='M50 470c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.05'/%3E%3Cpath d='M50 540c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.05'/%3E%3C/svg%3E")`;
+
 const ResumePreview = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,13 +29,10 @@ const ResumePreview = () => {
     await generateResumePDF(result, formData.fullName, primaryColor);
   };
 
-  // SVG topography pattern at low opacity
-  const topoPattern = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cpath d='M50 50c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.08'/%3E%3Cpath d='M50 120c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.08'/%3E%3Cpath d='M50 190c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.08'/%3E%3Cpath d='M50 260c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.08'/%3E%3Cpath d='M50 330c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.08'/%3E%3Cpath d='M50 400c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.08'/%3E%3Cpath d='M50 470c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.08'/%3E%3Cpath d='M50 540c30-20 70 10 100-5s60-40 100-20 50 50 100 30 70-30 100-10 60 40 100 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.08'/%3E%3C/svg%3E")`;
-
   return (
     <div
       className="min-h-screen flex items-start justify-center py-10 px-4"
-      style={{ background: "#2c2c2c" }}
+      style={{ background: "#121212" }}
     >
       {/* A4 Resume */}
       <div
@@ -136,7 +135,7 @@ const ResumePreview = () => {
       {/* Floating action buttons */}
       <div className="fixed bottom-6 left-6 flex flex-col gap-3 z-50" dir="rtl">
         <Button
-          onClick={() => navigate("/", { state: { returnData: state } })}
+          onClick={() => navigate("/", { state: { returnData: { result, formData } } })}
           variant="outline"
           size="lg"
           className="gap-2 bg-white/90 hover:bg-white shadow-lg"

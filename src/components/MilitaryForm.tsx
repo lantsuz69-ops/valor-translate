@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -12,12 +12,21 @@ interface MilitaryFormProps {
   onResult: (data: TranslationResult, formData: { fullName: string; role: string; responsibilities: string }) => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
+  initialData?: { fullName: string; role: string; responsibilities: string } | null;
 }
 
-const MilitaryForm = ({ onResult, isLoading, setIsLoading }: MilitaryFormProps) => {
-  const [fullName, setFullName] = useState("");
-  const [role, setRole] = useState("");
-  const [responsibilities, setResponsibilities] = useState("");
+const MilitaryForm = ({ onResult, isLoading, setIsLoading, initialData }: MilitaryFormProps) => {
+  const [fullName, setFullName] = useState(initialData?.fullName ?? "");
+  const [role, setRole] = useState(initialData?.role ?? "");
+  const [responsibilities, setResponsibilities] = useState(initialData?.responsibilities ?? "");
+
+  useEffect(() => {
+    if (initialData) {
+      setFullName(initialData.fullName);
+      setRole(initialData.role);
+      setResponsibilities(initialData.responsibilities);
+    }
+  }, [initialData]);
 
   const handleSubmit = async () => {
     if (!role.trim() || !responsibilities.trim() || !fullName.trim()) {
