@@ -42,7 +42,7 @@ const Index = () => {
             <motion.div key="results" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
               <ResultsSection result={result} formData={formData} />
               <button onClick={() => setResult(null)} className="mt-12 mx-auto block text-slate-500 hover:text-white font-mono text-[8px] uppercase tracking-[0.3em]">
-                // SYSTEM_REBOOT / NEW_DATA_INPUT
+               \\ לחץ כאן כדי ליצור מחדש //
               </button>
             </motion.div>
           )}
