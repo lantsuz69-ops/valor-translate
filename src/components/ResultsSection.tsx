@@ -1,6 +1,4 @@
-import { useRef } from "react";
-import { useReactToPrint } from "react-to-print";
-import { Download, ShieldCheck, Star, FileText } from "lucide-react";
+import { Download, ShieldCheck, Star } from "lucide-react";
 
 interface ResultsSectionProps {
   result: {
@@ -16,13 +14,9 @@ interface ResultsSectionProps {
 }
 
 const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  // התיקון הקריטי: שימוש ב-contentRef עבור גרסה 3
-  const handlePrint = useReactToPrint({
-    contentRef: contentRef,
-    documentTitle: `CV_${formData.fullName}`,
-  });
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <div dir="rtl" className="max-w-4xl mx-auto p-6 text-right font-sans">
@@ -44,7 +38,7 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
           <span className="text-9xl font-black rotate-[-20deg]">SKILL BRIDGE</span>
         </div>
 
-        <div ref={contentRef} className="p-12 relative z-10 bg-white min-h-[1000px]">
+        <div className="p-12 relative z-10 bg-white min-h-[1000px]">
           <header className="border-b-4 border-slate-900 pb-6 mb-8">
             <h1 className="text-4xl font-black text-slate-900">{formData.fullName}</h1>
             <p className="text-xl text-emerald-600 font-bold">{result.title}</p>

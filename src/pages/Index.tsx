@@ -4,6 +4,13 @@ import HeroSection from "@/components/HeroSection";
 import MilitaryForm from "@/components/MilitaryForm";
 import ResultsSection from "@/components/ResultsSection";
 
+export interface TranslationResult {
+  title: string;
+  summary: string;
+  skills: string[];
+  experience: string[];
+}
+
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
