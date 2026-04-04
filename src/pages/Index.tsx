@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import HeroSection from "@/components/HeroSection";
 import MilitaryForm from "@/components/MilitaryForm";
-import ResultsSection from "@/components/ResultsSection";
+import { ResultsSection } from "@/components/ResultsSection";
 
 export interface TranslationResult {
   title: string;
