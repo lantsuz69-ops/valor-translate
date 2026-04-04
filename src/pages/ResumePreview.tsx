@@ -26,7 +26,7 @@ const ResumePreview = () => {
   const primaryColor = detectUnitColor(formData.role, formData.responsibilities);
 
   const handleDownload = async () => {
-    await generateResumePDF(result, formData.fullName, primaryColor);
+    await generateResumePDF("resume-preview-page", formData.fullName || "Resume");
   };
 
   return (
