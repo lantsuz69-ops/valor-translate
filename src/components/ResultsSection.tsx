@@ -1,92 +1,145 @@
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import { Download, ShieldCheck, Star, Briefcase, Award } from "lucide-react";
+import { Download, TrendingUp, Cpu, Users } from "lucide-react";
 
 interface ResultsSectionProps {
-  result: { title: string; summary: string; skills: string[]; experience: string[]; };
-  formData: { fullName: string; role: string; };
+  result: {
+    title: string;
+    summary: string;
+    skills: string[]; // נשתמש בזה ל-Core Competencies
+    experience: {
+      title: string;
+      company: string;
+      years: string;
+      results: string[];
+    }[];
+  };
+  formData: {
+    fullName: string;
+    role: string;
+  };
 }
+
+// פונקציית עזר להמרת אייקון Competency באופן דינמי
+const getCompetencyIcon = (index: number) => {
+  switch (index % 3) {
+    case 0: return <TrendingUp className="h-10 w-10 text-slate-500" />;
+    case 1: return <Cpu className="h-10 w-10 text-slate-500" />;
+    case 2: return <Users className="h-10 w-10 text-slate-500" />;
+    default: return <TrendingUp className="h-10 w-10 text-slate-500" />;
+  }
+};
 
 const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // הגדרה נכונה לגרסה 3.0.2 של react-to-print
   const handlePrint = useReactToPrint({
     contentRef: contentRef,
-    documentTitle: `CV_${formData.fullName}_SkillBridge`,
+    documentTitle: `CV_${formData.fullName}_${new Date().toLocaleDateString('he-IL')}`,
   });
 
   return (
     <div dir="rtl" className="max-w-5xl mx-auto p-4 text-right font-sans">
-      {/* כפתור הורדה */}
-      <div className="flex justify-center mb-12 no-print">
+      {/* כפתור הורדה - נוח ללקוח */}
+      <div className="flex justify-center mb-10 no-print">
         <button 
           onClick={() => handlePrint()}
-          className="flex items-center gap-4 bg-slate-900 text-white px-10 py-5 rounded-2xl font-black text-xl hover:bg-emerald-600 transition-all shadow-2xl"
+          className="flex items-center gap-4 bg-[#141F32] text-white px-10 py-5 rounded-xl font-bold text-lg hover:bg-[#324564] transition-all shadow-lg"
         >
           <Download className="h-6 w-6" />
-          שמור קורות חיים כ-PDF
+          שמור קורות חיים מעוצבים כ-PDF
         </button>
       </div>
 
-      {/* דף קורות החיים */}
-      <div className="bg-white shadow-2xl border border-slate-100 rounded-[2.5rem] overflow-hidden relative">
-        
-        {/* Watermark עדין */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none">
-          <span className="text-[12vw] font-black rotate-[-25deg] text-slate-900">SKILL BRIDGE AI</span>
-        </div>
-
-        <div ref={contentRef} className="p-12 md:p-20 relative z-10 bg-white min-h-[1100px] flex flex-col">
+      {/* דף קורות החיים המעוצב בדיוק כמו בתמונה */}
+      <div className="bg-white shadow-2xl border border-slate-100 rounded-lg overflow-hidden relative">
+        <div ref={contentRef} className="p-16 relative z-10 bg-white min-h-[1100px] text-right">
           
-          <header className="border-b-8 border-slate-900 pb-10 mb-12">
-            <h1 className="text-6xl font-black text-slate-900 mb-2">{formData.fullName}</h1>
-            <p className="text-2xl text-emerald-600 font-bold uppercase tracking-widest">{result.title}</p>
+          {/* Header Section: כחול כהה, אותיות גדולות */}
+          <header className="border-b-[3px] border-[#324564] pb-6 mb-10 text-center">
+            <h1 className="text-5xl font-extrabold text-[#141F32] uppercase tracking-wider mb-2">{formData.fullName}</h1>
+            <p className="text-xl text-slate-600 font-bold uppercase tracking-widest">{result.title}</p>
           </header>
 
-          <section className="mb-16">
-            <div className="flex items-center gap-3 mb-6 text-slate-400">
-              <Briefcase className="h-5 w-5" />
-              <h3 className="text-sm font-black uppercase tracking-widest">תקציר מקצועי</h3>
+          {/* Summary Section: רקע אפור בהיר */}
+          <section className="mb-12">
+            <div className="bg-[#F2F4F8] p-8 rounded-lg border border-slate-100">
+              <p className="text-xl text-slate-800 leading-relaxed font-medium">
+                {result.summary}
+              </p>
             </div>
-            <p className="text-2xl text-slate-800 leading-[1.6] font-medium text-justify">
-              {result.summary}
-            </p>
           </section>
 
-          <section className="flex-grow space-y-12">
-            <div className="flex items-center gap-3 mb-4 text-slate-400">
-              <Star className="h-5 w-5" />
-              <h3 className="text-sm font-black uppercase tracking-widest">ניסיון והישגים</h3>
+          {/* Core Competencies: עיצוב איקונים דינמי */}
+          <section className="mb-14">
+            <h2 className="text-2xl font-bold text-[#141F32] uppercase tracking-widest mb-8 text-center">Core Competencies</h2>
+            <div className="grid grid-cols-3 gap-6 text-center">
+              {result.skills.slice(0, 3).map((skillGroup, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <div className="mb-4">{getCompetencyIcon(i)}</div>
+                  <h4 className="text-lg font-bold text-[#141F32] leading-snug">{skillGroup}</h4>
+                </div>
+              ))}
             </div>
-            {result.experience.map((exp, i) => (
-              <div key={i} className="relative pr-16 group">
-                <div className="absolute right-0 top-0 text-slate-100 font-black text-6xl">0{i+1}</div>
-                <div className="relative z-10 pt-4">
-                  <p className="text-xl text-slate-700 leading-relaxed font-medium">{exp}</p>
+          </section>
+
+          {/* שתי עמודות לניסיון וחינוך */}
+          <div className="grid grid-cols-3 gap-10">
+            {/* עמודה רחבה (2/3): Professional Experience */}
+            <div className="col-span-2 space-y-10">
+              <h2 className="text-2xl font-bold text-[#141F32] uppercase tracking-widest mb-6 border-b border-slate-200 pb-2">Professional Experience</h2>
+              {result.experience.map((exp, i) => (
+                <div key={i}>
+                  <div className="flex justify-between items-baseline mb-3">
+                    <h3 className="text-xl font-bold text-slate-900">{exp.title}</h3>
+                    <p className="text-sm font-bold text-slate-600 italic">{exp.company}, {exp.years}</p>
+                  </div>
+                  <div className="space-y-1.5">
+                    {exp.results.map((bullet, j) => (
+                      <p key={j} className="text-base text-slate-800 leading-relaxed font-medium relative pr-4">• {bullet}</p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* עמודה צרה (1/3): Education, Certifications */}
+            <div className="space-y-10 border-r border-slate-100 pr-10">
+              {/* Education */}
+              <div>
+                <h2 className="text-2xl font-bold text-[#141F32] uppercase tracking-widest mb-6">Education</h2>
+                <div className="space-y-4">
+                  <h3 className="text-xl font-bold text-slate-900">MBA, Operations Management</h3>
+                  <p className="text-base font-medium text-slate-800">State University</p>
+                  <h3 className="text-xl font-bold text-slate-900 mt-4">BS, Business Admin</h3>
+                  <p className="text-base font-medium text-slate-800">Tech Institute</p>
                 </div>
               </div>
-            ))}
-          </section>
 
-          <footer className="mt-20 pt-10 border-t border-slate-100 flex justify-between items-center opacity-30">
-            <div className="flex items-center gap-3 font-bold text-slate-900">
-              <ShieldCheck className="h-6 w-6" />
-              <span>CERTIFIED BY SKILL-BRIDGE</span>
+              {/* Certifications */}
+              <div>
+                <h2 className="text-2xl font-bold text-[#141F32] uppercase tracking-widest mb-6">Certifications</h2>
+                <div className="space-y-4">
+                  <h3 className="text-xl font-bold text-slate-900">PMP</h3>
+                  <p className="text-base font-medium text-slate-800">Six Sigma Black Belt</p>
+                </div>
+              </div>
             </div>
-            <div className="text-[10px] font-mono">2026 © PRO-BUILD</div>
-          </footer>
+          </div>
+
         </div>
       </div>
 
+      {/* הגדרות הדפסה */}
       <style>{`
         @media print {
-          @page { size: A4; margin: 0mm; }
+          @page { size: auto; margin: 0mm; }
           .no-print { display: none !important; }
-          .rounded-[2.5rem] { border-radius: 0 !important; }
+          .rounded-lg { border-radius: 0 !important; }
           .shadow-2xl { box-shadow: none !important; }
+          .bg-[#F2F4F8] { background-color: #F2F4F8 !important; -webkit-print-color-adjust: exact; }
           body { background: white !important; -webkit-print-color-adjust: exact !important; }
-          * { text-align: right !important; }
+          * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
       `}</style>
     </div>
