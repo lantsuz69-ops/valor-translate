@@ -14,13 +14,9 @@ interface ResultsSectionProps {
 }
 
 const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  // התיקון הקריטי: שימוש ב-contentRef עבור גרסה 3
-  const handlePrint = useReactToPrint({
-    contentRef: contentRef,
-    documentTitle: `CV_${formData.fullName}`,
-  });
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <div dir="rtl" className="max-w-4xl mx-auto p-6 text-right font-sans">
