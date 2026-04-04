@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import { CheckCircle2, Target, Download, ShieldCheck } from "lucide-react";
+import { Download, ShieldCheck, Star, Trophy } from "lucide-react";
 
 interface ResultsSectionProps {
   result: {
