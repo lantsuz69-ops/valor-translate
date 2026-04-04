@@ -14,7 +14,7 @@
     ],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "noEmit": false,
+    "noEmit": true,
     "paths": {
       "@/*": [
         "./src/*"
@@ -28,10 +28,5 @@
   },
   "include": [
     "src"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
   ]
 }
