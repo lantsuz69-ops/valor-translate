@@ -74,7 +74,7 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
           <section className="mb-14">
             <h2 className="text-2xl font-bold text-[#141F32] uppercase tracking-widest mb-8 text-center">Core Competencies</h2>
             <div className="grid grid-cols-3 gap-6 text-center">
-              {result.skills.slice(0, 3).map((skillGroup, i) => (
+              {result.skills.slice(0, 3)?.map((skillGroup, i) => (
                 <div key={i} className="flex flex-col items-center">
                   <div className="mb-4">{getCompetencyIcon(i)}</div>
                   <h4 className="text-lg font-bold text-[#141F32] leading-snug">{skillGroup}</h4>
@@ -88,14 +88,14 @@ const ResultsSection = ({ result, formData }: ResultsSectionProps) => {
             {/* עמודה רחבה (2/3): Professional Experience */}
             <div className="col-span-2 space-y-10">
               <h2 className="text-2xl font-bold text-[#141F32] uppercase tracking-widest mb-6 border-b border-slate-200 pb-2">Professional Experience</h2>
-              {result.experience.map((exp, i) => (
+              {result.experience?.map((exp, i) => (
                 <div key={i}>
                   <div className="flex justify-between items-baseline mb-3">
                     <h3 className="text-xl font-bold text-slate-900">{exp.title}</h3>
                     <p className="text-sm font-bold text-slate-600 italic">{exp.company}, {exp.years}</p>
                   </div>
                   <div className="space-y-1.5">
-                    {exp.results.map((bullet, j) => (
+                    {exp.results?.map((bullet, j) => (
                       <p key={j} className="text-base text-slate-800 leading-relaxed font-medium relative pr-4">• {bullet}</p>
                     ))}
                   </div>
